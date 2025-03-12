@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: quester
+  profiles:
+    active: secret
+
+server:
+  port: 8081
+
+bot:
+  BOT_TOKEN: ${BOT_TOKEN:FIX_ME}
