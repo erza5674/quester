@@ -5,7 +5,10 @@ import org.telegram.abilitybots.api.db.DBContext;
 import org.telegram.abilitybots.api.sender.SilentSender;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import telbot.quester.bot.stats.UserState;
+import telbot.quester.chat.Chat;
+import telbot.quester.chat.ChatHandler;
+import telbot.quester.stats.Language;
+import telbot.quester.stats.UserState;
 import telbot.quester.questguts.Quest;
 import telbot.quester.questguts.QuestRepository;
 
@@ -13,11 +16,11 @@ import java.util.Map;
 import java.util.UUID;
 
 import static telbot.quester.bot.Constants.START_TEXT;
-import static telbot.quester.bot.stats.UserState.AWAITING_NAME;
 
 public class ResponseHandler {
     private final SilentSender sender;
-    private final Map<Long, UserState> chatStates;
+    private final Map<Long, Chat> chatStates;
+    private final ChatHandler chatHandler;
 
     @Autowired
     private QuestRepository questRepository;
@@ -26,14 +29,18 @@ public class ResponseHandler {
         this.sender = sender;
         chatStates = db.getMap(Constants.CHAT_STATES);
         questRepository = new QuestRepository();
+        chatHandler = ChatHandler.getInstanse();
     }
 
     public void replyToStart(long chatId) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(START_TEXT);
+        message.setReplyMarkup(QuestKeyboardFactory.getQuestKeyboard());
         sender.execute(message);
-        chatStates.put(chatId, AWAITING_NAME);
+
+        //Запихнем данные о новом чате
+        chatHandler.onStartMessage(chatId);
     }
 
     public void replyToButtons(long chatId, Message message){
@@ -51,7 +58,7 @@ public class ResponseHandler {
             sender.execute(sendMessage);
         }
 
-        if (message.getText().equalsIgnoreCase("/quest")){
+        if (message.getText().equalsIgnoreCase("/quest") || message.getText().equalsIgnoreCase("Следующий квест!")) {
             System.out.println("New quest request");
 
             SendMessage sendMessage = new SendMessage();

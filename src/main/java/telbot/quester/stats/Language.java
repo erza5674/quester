@@ -1,3 +1,3 @@
-package telbot.quester.bot.stats;
+package telbot.quester.stats;
 
 public enum Language { RUSSIAN, ENGLISH}

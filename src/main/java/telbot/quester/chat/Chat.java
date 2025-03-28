@@ -1,8 +1,8 @@
-package telbot.quester.bot;
+package telbot.quester.chat;
 
-import telbot.quester.bot.stats.Action;
-import telbot.quester.bot.stats.Language;
-import telbot.quester.bot.stats.UserState;
+import telbot.quester.stats.Action;
+import telbot.quester.stats.Language;
+import telbot.quester.stats.UserState;
 
 import java.util.UUID;
 
@@ -14,7 +14,7 @@ public class Chat {
     private Action lastAction;
     private UUID lastQuestUUId;
 
-    public Chat(Long chatId, Language language) {
+    public Chat() {
         this.chatId = chatId;
         this.language = language;
     }
@@ -23,8 +23,9 @@ public class Chat {
         return chatId;
     }
 
-    public void setChatId(Long chatId) {
+    public Chat setChatId(Long chatId) {
         this.chatId = chatId;
+        return this;
     }
 
     public UserState getUserState() {
