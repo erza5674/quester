@@ -1,4 +1,4 @@
 package telbot.quester.stats;
 
-public enum Action {QUEST_REQUEST, LIKE, DISLIKE, NEW_QUEST, DELETION, OTHER}
+public enum Action {START,QUEST_REQUEST, LIKE, DISLIKE, NEW_QUEST, DELETION, OTHER}
 

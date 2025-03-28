@@ -1,11 +1,16 @@
 package telbot.quester.chat;
 
+import telbot.quester.stats.Action;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class ChatHandler {
 
     private static ChatHandler instanse;
     private static ArrayList<Chat> chatArrayList;
+    private static Map<Long,Chat> chatMap;
 
     public ChatHandler(){
     }
@@ -15,35 +20,30 @@ public final class ChatHandler {
     }
 
     public static ChatHandler getInstanse(){
-        if (instanse == null){
-            instanse = new ChatHandler();
-        }
-        if (chatArrayList == null){
-            chatArrayList = new ArrayList<>();
-        }
+        if (instanse == null){ instanse = new ChatHandler(); }
+        if (chatArrayList == null){ chatArrayList = new ArrayList<>(); }
+        if (chatMap == null){ chatMap = new HashMap<>();}
 
         return instanse;
     }
 
     public void onStartMessage(Long id) {
         // Check if the chat exists
-        if (doesChatExistById(id)) {
+        if (chatMap.containsKey(id)) {
             // Handle existing chat
+            System.out.println("Chat allready exist");
         } else {
             // Handle new chat
-            chatArrayList.add(createNewChat(id));
+            Chat newChat = createNewChat(id);
+            chatMap.put(newChat.getChatId(),newChat);
         }
+
+        addAction(id, Action.START);
     }
 
     public boolean doesChatExistById(Long id) {
-        if (chatArrayList == null) {
-            return false; // If the list is not initialized, return false
-        }
-
-        for (Chat chat : chatArrayList) {
-            if (chat.getChatId().equals(id)) {
-                return true; // Chat with the specified ID exists
-            }
+        if (chatMap.containsKey(id)){
+            return true;
         }
         return false; // Chat with the specified ID does not exist
     }
@@ -62,13 +62,12 @@ public final class ChatHandler {
             return null;
         }
 
-        for (Chat chat1 : chatArrayList){
-            if (chat1.getChatId().equals(id)){
-                return chat1;
-            }
-        }
-
         //pizda rulu!
-        return null;
+        return chatMap.get(id);
+    }
+
+    public void addAction(Long id, Action action){
+        Chat chat = chatMap.get(id);
+        chat.setLastAction(action);
     }
 }
