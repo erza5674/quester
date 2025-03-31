@@ -67,7 +67,6 @@ public final class ChatHandler {
     }
 
     public void addAction(Long id, Action action){
-        Chat chat = chatMap.get(id);
-        chat.setLastAction(action);
+        chatMap.get(id).setLastAction(action);
     }
 }
