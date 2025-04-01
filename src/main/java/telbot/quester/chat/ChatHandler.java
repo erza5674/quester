@@ -1,10 +1,13 @@
 package telbot.quester.chat;
 
+import org.checkerframework.checker.units.qual.A;
+import org.telegram.abilitybots.api.db.DBContext;
 import telbot.quester.stats.Action;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public final class ChatHandler {
 
@@ -19,10 +22,11 @@ public final class ChatHandler {
         instanse= chatHandler;
     }
 
-    public static ChatHandler getInstanse(){
+    public static ChatHandler getInstanse(DBContext db){
         if (instanse == null){ instanse = new ChatHandler(); }
         if (chatArrayList == null){ chatArrayList = new ArrayList<>(); }
         if (chatMap == null){ chatMap = new HashMap<>();}
+
 
         return instanse;
     }
@@ -68,5 +72,9 @@ public final class ChatHandler {
 
     public void addAction(Long id, Action action){
         chatMap.get(id).setLastAction(action);
+    }
+
+    public void  rememberLastQuest(Long chatID, UUID questId){
+        chatMap.get(chatID).setLastAction(Action.QUEST_REQUEST).setLastQuestUUId(questId);
     }
 }

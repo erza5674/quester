@@ -1,12 +1,14 @@
 package telbot.quester.questguts;
 
+import java.util.UUID;
+
 public class Quest {
 
-    private Integer id;
+    private UUID id;
     private String text;
     private Integer like;
 
-    public Quest(Integer id, String text) {
+    public Quest(UUID id, String text) {
         this.id = id;
         this.text = text;
     }
@@ -22,11 +24,11 @@ public class Quest {
         this.text = text;
     }
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

@@ -44,9 +44,9 @@ public class QuestRepository {
     public void addQuest(String questText) {
         int newId = questMap.size() + 1; // Generate a new ID
         Quest newQuest = new Quest();
-//        newQuest.setId(newId);
+        newQuest.setId(UUID.randomUUID());
         newQuest.setText(questText);
-        questMap.put(UUID.randomUUID(), newQuest); // Add the new quest to the map
+        questMap.put(newQuest.getId(), newQuest); // Add the new quest to the map
     }
 
     public String get_list_of_all_quests(){

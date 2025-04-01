@@ -20,7 +20,6 @@ import static telbot.quester.bot.Constants.START_TEXT;
 
 public class ResponseHandler {
     private final SilentSender sender;
-    private final Map<Long, Chat> chatStates;
     private final ChatHandler chatHandler;
 
     @Autowired
@@ -28,7 +27,6 @@ public class ResponseHandler {
 
     public ResponseHandler(SilentSender sender, DBContext db){
         this.sender = sender;
-        chatStates = db.getMap(Constants.CHAT_STATES);
         questRepository = new QuestRepository();
         chatHandler = ChatHandler.getInstanse();
     }
@@ -74,7 +72,7 @@ public class ResponseHandler {
             sender.execute(sendMessage);
 
             System.out.println("Sended quest :" + sendMessage.getText().toString());
-            chatHandler.addAction(chatId, Action.QUEST_REQUEST);
+            chatHandler.rememberLastQuest(chatId, quest.getId());
         }
 
         if (message.getText().contains("add")) {
@@ -120,7 +118,6 @@ public class ResponseHandler {
     }
 
     public boolean userIsActive(Long chatId) {
-        return chatStates.containsKey(chatId);
+        return chatHandler.doesChatExistById(chatId);
     }
-
 }

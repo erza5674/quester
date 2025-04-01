@@ -48,8 +48,9 @@ public class Chat {
         return lastAction;
     }
 
-    public void setLastAction(Action lastAction) {
+    public Chat setLastAction(Action lastAction) {
         this.lastAction = lastAction;
+        return this;
     }
 
     public Language getLanguage() {
