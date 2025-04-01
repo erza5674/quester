@@ -28,7 +28,7 @@ public class ResponseHandler {
     public ResponseHandler(SilentSender sender, DBContext db){
         this.sender = sender;
         questRepository = new QuestRepository();
-        chatHandler = ChatHandler.getInstanse();
+        chatHandler = ChatHandler.getInstanse(db);
     }
 
     public void replyToStart(long chatId) {
