@@ -11,9 +11,11 @@ public class Quest {
     public Quest(UUID id, String text) {
         this.id = id;
         this.text = text;
+        this.like = 0;
     }
 
     public Quest() {
+        this.like = 0;
     }
 
     public String getText() {

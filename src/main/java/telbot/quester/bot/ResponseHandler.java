@@ -13,6 +13,7 @@ import telbot.quester.stats.UserState;
 import telbot.quester.questguts.Quest;
 import telbot.quester.questguts.QuestRepository;
 
+import java.util.IllegalFormatCodePointException;
 import java.util.Map;
 import java.util.UUID;
 
@@ -107,12 +108,14 @@ public class ResponseHandler {
         //like
         if (message.getText().contains("\uD83D\uDC4D")){
             System.out.println("Recived like");
+            likeHandler(chatId);
             chatHandler.addAction(chatId, Action.LIKE);
         }
 
         //dislike
         if (message.getText().contains("\uD83D\uDC4E")){
             System.out.println("Recived dislike");
+            dislikeHandler(chatId);
             chatHandler.addAction(chatId, Action.DISLIKE);
         }
     }
@@ -120,4 +123,33 @@ public class ResponseHandler {
     public boolean userIsActive(Long chatId) {
         return chatHandler.doesChatExistById(chatId);
     }
+
+    private void likeHandler(Long chatId){
+        //проверить есть ли ююид квеста
+        UUID questUUID = chatHandler.getChatById(chatId).getLastQuestUUId();
+
+        if (questUUID == null){ return; }
+
+        //Проверить что было предыдущим действием
+        Action action = chatHandler.getChatById(chatId).getLastAction();
+        if (action != Action.QUEST_REQUEST){ return; }
+
+        //Если все ок - поставить лайк
+        questRepository.getQuestByID(questUUID).like();
+    }
+
+    private void dislikeHandler(Long chatID){
+        //проверить есть ли ююид квеста
+        UUID questUUID = chatHandler.getChatById(chatID).getLastQuestUUId();
+
+        if (questUUID == null){ return; }
+
+        //Проверить что было предыдущим действием
+        Action action = chatHandler.getChatById(chatID).getLastAction();
+        if (action != Action.QUEST_REQUEST){ return; }
+
+        //Если все ок - поставить лайк
+        questRepository.getQuestByID(questUUID).dislike();
+    }
+
 }

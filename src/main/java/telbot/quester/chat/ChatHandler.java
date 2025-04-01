@@ -3,6 +3,8 @@ package telbot.quester.chat;
 import org.checkerframework.checker.units.qual.A;
 import org.telegram.abilitybots.api.db.DBContext;
 import telbot.quester.stats.Action;
+import telbot.quester.stats.Language;
+import telbot.quester.stats.UserState;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,10 +27,29 @@ public final class ChatHandler {
     public static ChatHandler getInstanse(DBContext db){
         if (instanse == null){ instanse = new ChatHandler(); }
         if (chatArrayList == null){ chatArrayList = new ArrayList<>(); }
-        if (chatMap == null){ chatMap = new HashMap<>();}
 
+        if (chatMap == null){
+            fillChatMapFromDB(db);
+        }
 
         return instanse;
+    }
+
+    private static void fillChatMapFromDB(DBContext db){
+        if (chatMap == null){
+            chatMap = new HashMap<>();
+        }
+
+
+        Map<Object, Object> userDBMap = db.getMap("USER_ID");
+
+        for (Map.Entry<Object, Object> entry : userDBMap.entrySet()) {
+            Chat chat = new Chat();
+            chat.setChatId((Long) entry.getValue());
+            chat.setLanguage(Language.RUSSIAN);
+
+            chatMap.put(chat.getChatId(), chat);
+        }
     }
 
     public void onStartMessage(Long id) {
@@ -56,17 +77,12 @@ public final class ChatHandler {
         return new Chat().setChatId(id);
     }
 
-
     //Метод что бы вернуть чат по ИД
-    public Chat getCurrentChat(Long id){
-        Chat chat;
-
+    public Chat getChatById(Long id){
         if (chatArrayList == null){
-            //pizda rulu
-            return null;
+            return null; //pizda rulu
         }
 
-        //pizda rulu!
         return chatMap.get(id);
     }
 

@@ -69,5 +69,12 @@ public class QuestRepository {
         }
     }
 
+    public Quest getQuestByID(UUID id){
+        if (!questMap.containsKey(id)){
+            return null;
+        }
+        return questMap.get(id);
+    }
+
 }
 

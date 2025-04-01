@@ -35,7 +35,6 @@ public class Quester extends AbilityBot {
                 .locality(USER)
                 .privacy(PUBLIC)
                 .action(ctx -> responseHandler.replyToStart(ctx.chatId()))
-                //.action(ctx -> responseHandler.replyToButtons(ctx.chatId()))
                 .build();
     }
 
