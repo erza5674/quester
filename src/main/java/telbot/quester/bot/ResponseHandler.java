@@ -108,14 +108,16 @@ public class ResponseHandler {
         //like
         if (message.getText().contains("\uD83D\uDC4D")){
             System.out.println("Recived like");
-            likeHandler(chatId);
+//            likeHandler(chatId)
+            likeDislikeHandler(chatId, Action.LIKE);
             chatHandler.addAction(chatId, Action.LIKE);
         }
 
         //dislike
         if (message.getText().contains("\uD83D\uDC4E")){
             System.out.println("Recived dislike");
-            dislikeHandler(chatId);
+//            dislikeHandler(chatId);
+            likeDislikeHandler(chatId, Action.DISLIKE);
             chatHandler.addAction(chatId, Action.DISLIKE);
         }
     }
@@ -152,4 +154,39 @@ public class ResponseHandler {
         questRepository.getQuestByID(questUUID).dislike();
     }
 
+    private void likeDislikeHandler(Long chatID, Action action) {
+        String text = new String();
+        //проверить есть ли ююид квеста
+        UUID questUUID = chatHandler.getChatById(chatID).getLastQuestUUId();
+
+        if (questUUID == null) {
+            return;
+        }
+
+        //Проверить что было предыдущим действием
+        Action lastAction = chatHandler.getChatById(chatID).getLastAction();
+        if (lastAction != Action.QUEST_REQUEST ){
+            return;
+        }
+
+        //Если все ок - поставить лайк
+        switch (action){
+            case LIKE:
+                Integer like = questRepository.getQuestByID(questUUID).like();
+                text = "Отлично! Задание -  "+ questRepository.getQuestByID(questUUID).getText() + " теперь имеет рейтинг " + like.toString();
+                break;
+            case DISLIKE:
+                Integer dislike = questRepository.getQuestByID(questUUID).dislike();
+                text = "Ну вот :( Задание -  "+ questRepository.getQuestByID(questUUID).getText() + " теперь имеет рейтинг " + dislike.toString();
+                break;
+        }
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatID);
+
+        sendMessage.setText(text);
+
+        sender.execute(sendMessage);
+
+    }
 }
