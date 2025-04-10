@@ -1,9 +1,17 @@
 package telbot.quester.questguts;
 
+import jakarta.persistence.*;
+import org.springframework.stereotype.Component;
+
 import java.util.UUID;
 
+@Component
+@Entity
+@Table(name = "Quests")
 public class Quest {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String text;
     private Integer like;

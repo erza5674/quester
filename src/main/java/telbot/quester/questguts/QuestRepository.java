@@ -10,8 +10,6 @@ public class QuestRepository {
 
     private static Map<UUID, Quest> questMap = new HashMap<>();
 
-    private static List<Quest> questsList = new ArrayList<>();
-
     public QuestRepository() {
         if (questMap.isEmpty()){
             generate_test_quest();

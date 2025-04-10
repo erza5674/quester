@@ -3,6 +3,24 @@ spring:
     name: quester
   profiles:
     active: secret
+    datasource:
+      url: jdbc:postgresql://${DATABASE_HOST:FIX_ME}:${DATABASE_PORT:FIX_ME}/postgres
+      username: ${DATABASE_USERNAME:FIX_ME}
+      password: ${DATABASE_PASSWORD:FIX_ME}
+      driver-class-name: org.postgresql.Driver
+      hikari:
+        connectionTimeout: 2000000
+    jpa:
+      hibernate:
+        ddl-auto: create-drop
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+          jdbc:
+            lob:
+              non_contextual_creation: true
+
+        show-sql: true
 
 server:
   port: 8081

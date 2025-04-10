@@ -1,5 +1,7 @@
 package telbot.quester.chat;
 
+import jakarta.persistence.Entity;
+import org.springframework.stereotype.Component;
 import telbot.quester.stats.Action;
 import telbot.quester.stats.Language;
 import telbot.quester.stats.UserState;
